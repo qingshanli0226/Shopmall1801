@@ -25,4 +25,7 @@ public class ShopmallConstant {
     public static final String PLAYER_VIDEO_URL = "videoUrl";
     public static final String PLAYER_VIDEO_LIST = "videoList";
     public static final String PLAYER_VIDEO_POSITION = "position";
+
+
+
 }

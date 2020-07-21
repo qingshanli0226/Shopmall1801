@@ -1,22 +1,23 @@
 package com.shopmall.bawei.shopmall1801.home.view;
 
 import android.content.Intent;
-import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.shopmall.bawei.framework.base.BaseActivity;
 import com.shopmall.bawei.framework.base.BaseMVPActivity;
 import com.shopmall.bawei.net.mode.HomeBean;
 import com.shopmall.bawei.shopcar.ShopcarActivity;
 import com.shopmall.bawei.shopmall1801.R;
 import com.shopmall.bawei.shopmall1801.home.contract.HomeContract;
 import com.shopmall.bawei.shopmall1801.home.presenter.HomePresenterImpl;
-import com.shopmall.bawei.user.RegisterActivity;
+import com.shopmall.bawei.user.register.view.RegisterActivity;
 
 public class MainActivity extends BaseMVPActivity<HomePresenterImpl, HomeContract.IHomeView> implements HomeContract.IHomeView {
 
+    private RecyclerView homeRv;
+    private HomeAdapter homeAdapter;
     @Override
     protected void initPresenter() {
         iHttpPresenter = new HomePresenterImpl();
@@ -53,6 +54,10 @@ public class MainActivity extends BaseMVPActivity<HomePresenterImpl, HomeContrac
             }
         });
 
+        homeRv = findViewById(R.id.homeRv);
+        homeRv.setLayoutManager(new LinearLayoutManager(this));
+        homeAdapter = new HomeAdapter();
+        homeRv.setAdapter(homeAdapter);
     }
 
     @Override
@@ -63,6 +68,12 @@ public class MainActivity extends BaseMVPActivity<HomePresenterImpl, HomeContrac
     @Override
     public void onHomeData(HomeBean homeBean) {
         Toast.makeText(this, "获取到首页数据", Toast.LENGTH_SHORT).show();
+        homeAdapter.addOneData(homeBean.getBanner_info());
+        homeAdapter.addOneData(homeBean.getChannel_info());
+        homeAdapter.addOneData(homeBean.getAct_info());
+        homeAdapter.addOneData(homeBean.getHot_info());
+        homeAdapter.addOneData(homeBean.getRecommend_info());
+        homeAdapter.addOneData(homeBean.getSeckill_info());
     }
 
     @Override

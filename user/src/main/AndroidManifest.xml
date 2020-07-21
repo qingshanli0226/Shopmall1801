@@ -3,7 +3,7 @@
 
     <application>
 
-        <activity android:name=".RegisterActivity"/>
+        <activity android:name=".register.view.RegisterActivity"/>
 
     </application>
 

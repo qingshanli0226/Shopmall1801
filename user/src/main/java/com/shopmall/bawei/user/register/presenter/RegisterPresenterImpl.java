@@ -1,12 +1,21 @@
-package com.shopmall.bawei.shopmall1801.home.presenter;
+package com.shopmall.bawei.user.register.presenter;
 
+import android.util.Log;
+import android.widget.Toast;
+
+import com.shopmall.bawei.common.ShopmallConstant;
+import com.shopmall.bawei.net.NetBusinessException;
 import com.shopmall.bawei.net.NetFunction;
 import com.shopmall.bawei.net.RetroCreator;
 import com.shopmall.bawei.net.ShopmallObserver;
 import com.shopmall.bawei.net.mode.BaseBean;
-import com.shopmall.bawei.net.mode.HomeBean;
-import com.shopmall.bawei.shopmall1801.home.contract.HomeContract;
+import com.shopmall.bawei.net.mode.RegisterBean;
+import com.shopmall.bawei.user.register.contract.RetisterContract;
 
+import org.json.JSONException;
+
+import java.net.SocketTimeoutException;
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observer;
@@ -15,16 +24,21 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.HttpException;
 
-public class HomePresenterImpl extends HomeContract.HomePresenter {
-
+public class RegisterPresenterImpl extends RetisterContract.RegisterPresenter {
 
     @Override
-    public void getHomeData() {
-        RetroCreator.getShopmallApiServie().getHomeData()
-                .delay(3, TimeUnit.SECONDS)//模拟网络请求差的情况，3秒钟后才实际进行网络请求
+    public void register(String name, String password) {
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("name", name);
+        params.put("password", password);
+
+        RetroCreator.getShopmallApiServie().register(params)
+                .delay(3,TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
-                .map(new NetFunction<BaseBean<HomeBean>, HomeBean>())
+                .map(new NetFunction<BaseBean<String>, String>())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(new Consumer<Disposable>() {
                     @Override
@@ -40,10 +54,10 @@ public class HomePresenterImpl extends HomeContract.HomePresenter {
                         iHttpView.hideLoading();//隐藏加载的UI
                     }
                 })
-                .subscribe(new ShopmallObserver<HomeBean>() {
+                .subscribe(new ShopmallObserver<String>() {
                     @Override
-                    public void onNext(HomeBean homeBean) {
-                        iHttpView.onHomeData(homeBean);
+                    public void onNext(String s) {
+                        iHttpView.onReigster(s);
                     }
 
                     @Override

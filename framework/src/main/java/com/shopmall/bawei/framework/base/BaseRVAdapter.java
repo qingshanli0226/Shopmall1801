@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-//定义一个万能适配器，可以适配不同类型的数据，又能适配不同ItemView
+//定义一个万能适配器,支持多布局的，可以适配不同类型的数据，又能适配不同ItemView
 public abstract class BaseRVAdapter<T> extends RecyclerView.Adapter<BaseRVAdapter.BaseViewHolder> {
     private IRecyclerViewItemClickListener iRecyclerViewItemClickListener;
     private ArrayList<T> dataList = new ArrayList<>();
@@ -37,13 +37,14 @@ public abstract class BaseRVAdapter<T> extends RecyclerView.Adapter<BaseRVAdapte
 
     @NonNull
     @Override
+    //根据viewType生成一个布局
     public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         //因为需要适配不同的布局，所以需要提供一个抽象方法，让子类把布局文件传递过来
-        View rootView = LayoutInflater.from(viewGroup.getContext()).inflate(getLayoutId(), viewGroup, false);
+        View rootView = LayoutInflater.from(viewGroup.getContext()).inflate(getLayoutId(viewType), viewGroup, false);
         return new BaseViewHolder(rootView);
     }
 
-    protected abstract int getLayoutId();
+    protected abstract int getLayoutId(int viewType);//让子类根据viewType类型返回指定的布局文件
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder baseViewHolder, final int position) {
@@ -57,11 +58,11 @@ public abstract class BaseRVAdapter<T> extends RecyclerView.Adapter<BaseRVAdapte
         });
 
         T itemData = getItemData(position);
-        convert(itemData, baseViewHolder);
+        convert(itemData, baseViewHolder, position);//通过position，将itemData转换成需要的类型，并且将baseViewHoder也转换成需要的viewHolder
 
     }
     //需要子类来，渲染UI
-    protected abstract void convert(T itemData, BaseViewHolder baseViewHolder);
+    protected abstract void convert(T itemData, BaseViewHolder baseViewHolder, int position);
 
     public T getItemData(int position) {
         return dataList.get(position);
@@ -104,4 +105,14 @@ public abstract class BaseRVAdapter<T> extends RecyclerView.Adapter<BaseRVAdapte
     public interface IRecyclerViewItemClickListener {
         void onItemClick(int position);
     }
+
+    //通过这个position来返回一种对应的布局类型，让子类来指定
+    @Override
+    public int getItemViewType(int position) {
+        return getViewType(position);
+    }
+
+
+    //让子类来实现
+    protected abstract int getViewType(int position);
 }
