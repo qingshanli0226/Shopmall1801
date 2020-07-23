@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <com.shopmall.bawei.common.view.ToolBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title_text="购物车"
+        app:right_text="编辑"
+        app:left_src="@mipmap/back"
+        app:right_show_only_text="true">
+
+    </com.shopmall.bawei.common.view.ToolBar>
 
     <TextView
         android:layout_width="match_parent"

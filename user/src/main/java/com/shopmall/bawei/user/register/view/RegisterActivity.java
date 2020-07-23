@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.shopmall.bawei.framework.base.BaseActivity;
@@ -22,6 +23,7 @@ public class RegisterActivity extends BaseMVPActivity<RegisterPresenterImpl, Ret
 
     private EditText passwordEditText;
     private EditText nameEditText;
+    private TextView errorTv;
 
     @Override
     protected void initPresenter() {
@@ -38,6 +40,7 @@ public class RegisterActivity extends BaseMVPActivity<RegisterPresenterImpl, Ret
         nameEditText = findViewById(R.id.name);
         passwordEditText = findViewById(R.id.password);
         findViewById(R.id.btnRegister).setOnClickListener(this);
+        errorTv = findViewById(R.id.errorTv);
     }
 
     @Override
@@ -55,12 +58,15 @@ public class RegisterActivity extends BaseMVPActivity<RegisterPresenterImpl, Ret
     @Override
     public void onReigster(String registerResult) {
         Toast.makeText(this, registerResult, Toast.LENGTH_SHORT).show();
+        errorTv.setVisibility(View.GONE);
     }
 
     @Override
     public void showError(String code, String message) {
         loadingBar.setVisibility(View.GONE);
         Toast.makeText(this, code + message, Toast.LENGTH_SHORT).show();
+        errorTv.setVisibility(View.VISIBLE);
+        errorTv.setText(message);
     }
 
     @Override

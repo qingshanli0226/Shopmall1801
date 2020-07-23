@@ -6,6 +6,7 @@ public class ShopmallConstant {
     //public static String BASE_URL = "http://192.168.3.4:8080/";
 
     public static String BASE_RESOURCE_URL = BASE_URL+"atguigu";
+    public static String BASE_RESOURCE_IMAGE_URL = BASE_URL+"atguigu/img";
 
 
     public static final String JSCON_ERROR_CODE = "10000";

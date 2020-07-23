@@ -1,10 +1,25 @@
 package com.shopmall.bawei.shopmall1801.home.view;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.shopmall.bawei.common.ShopmallConstant;
 import com.shopmall.bawei.framework.base.BaseRVAdapter;
 import com.shopmall.bawei.net.mode.HomeBean;
 import com.shopmall.bawei.shopmall1801.R;
+import com.shopmall.bawei.user.register.contract.RetisterContract;
+import com.shopmall.bawei.user.register.view.RegisterActivity;
+import com.youth.banner.Banner;
+import com.youth.banner.loader.ImageLoader;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HomeAdapter extends BaseRVAdapter<Object> {
 
@@ -47,9 +62,23 @@ public class HomeAdapter extends BaseRVAdapter<Object> {
         }
     }
 
-    private void displayChannel(Object itemData, BaseViewHolder baseViewHolder) {
+    private void displayChannel(Object itemData, final BaseViewHolder baseViewHolder) {
         Log.d("LQS", "displayChannel...");
-        HomeBean.ChannelInfoBean channelInfoBean = (HomeBean.ChannelInfoBean)itemData;//强转成我们需要的类型
+        List<HomeBean.ChannelInfoBean> channelInfoBeans = (List<HomeBean.ChannelInfoBean>)itemData;//强转成我们需要的类型
+        RecyclerView channelRv = baseViewHolder.getView(R.id.channelRv);
+        channelRv.setLayoutManager(new GridLayoutManager(baseViewHolder.itemView.getContext(),5));
+
+        ChannelAdapter channelAdapter = new ChannelAdapter();
+        channelRv.setAdapter(channelAdapter);
+        channelAdapter.updataData(channelInfoBeans);
+        channelAdapter.setiRecyclerViewItemClickListener(new IRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Intent intent = new Intent();
+                intent.setClass((Activity)(baseViewHolder.itemView.getContext()), RegisterActivity.class);
+                ((Activity)(baseViewHolder.itemView.getContext())).startActivity(intent);
+            }
+        });
     }
 
     private void displayAct(Object itemData, BaseViewHolder baseViewHolder) {
@@ -59,7 +88,21 @@ public class HomeAdapter extends BaseRVAdapter<Object> {
 
     private void displayBanner(Object itemData, BaseViewHolder baseViewHolder) {
         Log.d("LQS", "displayBanner...");
-        HomeBean.BannerInfoBean bannerInfoBean = (HomeBean.BannerInfoBean)itemData;//强转成我们需要的类型
+        List<HomeBean.BannerInfoBean> bannerInfoBeans = (List<HomeBean.BannerInfoBean>)itemData;//强转成我们需要的类型
+
+        final Banner banner = baseViewHolder.getView(R.id.bannerContainer);
+        banner.setImageLoader(new ImageLoader() {
+            @Override
+            public void displayImage(Context context, Object path, ImageView imageView) {
+                Glide.with(context).load((String)path).into(imageView);
+            }
+        });
+        List<String> imageUrls = new ArrayList<>();
+        for(HomeBean.BannerInfoBean item:bannerInfoBeans) {
+            imageUrls.add(ShopmallConstant.BASE_RESOURCE_IMAGE_URL+item.getImage());
+        }
+        banner.setImages(imageUrls);
+        banner.start();
     }
 
     private void displayHot(Object itemData, BaseViewHolder baseViewHolder) {
