@@ -13,8 +13,7 @@ import com.shopmall.bawei.common.ShopmallConstant;
 import com.shopmall.bawei.framework.base.BaseRVAdapter;
 import com.shopmall.bawei.net.mode.HomeBean;
 import com.shopmall.bawei.shopmall1801.R;
-import com.shopmall.bawei.user.register.contract.RetisterContract;
-import com.shopmall.bawei.user.register.view.RegisterActivity;
+import com.shopmall.bawei.user.login.view.LoginRegisterActivity;
 import com.youth.banner.Banner;
 import com.youth.banner.loader.ImageLoader;
 
@@ -75,7 +74,7 @@ public class HomeAdapter extends BaseRVAdapter<Object> {
             @Override
             public void onItemClick(int position) {
                 Intent intent = new Intent();
-                intent.setClass((Activity)(baseViewHolder.itemView.getContext()), RegisterActivity.class);
+                intent.setClass((Activity)(baseViewHolder.itemView.getContext()), LoginRegisterActivity.class);
                 ((Activity)(baseViewHolder.itemView.getContext())).startActivity(intent);
             }
         });

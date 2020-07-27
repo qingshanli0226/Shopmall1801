@@ -8,53 +8,26 @@
     tools:context=".home.view.MainActivity">
 
     <com.shopmall.bawei.common.view.ToolBar
-        android:id="@+id/mainToolbar"
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:left_show="false"
-        app:title_show="false"
-        app:right_src="@mipmap/menu"
-        app:right_text="消息"
-        app:right_text_color="@android:color/white"
-        app:right_text_size="15"
-        android:background="@android:color/holo_red_light">
-
+        android:visibility="gone">
     </com.shopmall.bawei.common.view.ToolBar>
 
-    <RelativeLayout
-        android:layout_below="@+id/mainToolbar"
+    <FrameLayout
+        android:layout_below="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/normalContent">
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/homeRv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </android.support.v7.widget.RecyclerView>
+        android:id="@+id/frameLayoutId"
+        android:layout_above="@+id/bottomBar">
+    </FrameLayout>
 
-        <ProgressBar android:layout_width="100dp" android:layout_height="100dp"
-            android:id="@+id/loadingBar"
-            android:layout_centerInParent="true"
-            android:visibility="gone"/>
-    </RelativeLayout>
-
-    <TextView
-        android:id="@+id/errorTv"
+    <com.shopmall.bawei.common.view.BottomBar
+        android:id="@+id/bottomBar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        android:gravity="center"
-        android:textColor="@android:color/holo_red_dark"
-        android:textSize="20sp"/>
-
-    <EditText
-        android:layout_width="500dp"
-        android:layout_height="30dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="10dp"
-        android:background="@android:color/white"
-        android:hint="请输入搜索内容"/>
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:select_color="@android:color/holo_red_dark">
+    </com.shopmall.bawei.common.view.BottomBar>
 
 </RelativeLayout>

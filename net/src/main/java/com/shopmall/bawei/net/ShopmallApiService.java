@@ -4,6 +4,7 @@ package com.shopmall.bawei.net;
 
 import com.shopmall.bawei.net.mode.BaseBean;
 import com.shopmall.bawei.net.mode.HomeBean;
+import com.shopmall.bawei.net.mode.LoginBean;
 
 import java.util.HashMap;
 
@@ -22,4 +23,8 @@ public interface ShopmallApiService {
     @POST("register")
     @FormUrlEncoded
     Observable<BaseBean<String>> register(@FieldMap HashMap<String, String> params);
+
+    @POST("login")
+    @FormUrlEncoded
+    Observable<BaseBean<LoginBean>> login(@FieldMap HashMap<String, String> params);
 }

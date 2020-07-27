@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -19,12 +20,15 @@ public class ToolBar extends RelativeLayout {
     private boolean isShowTitle = true;
     private boolean isShowRight = true;
     private boolean isRightOnlyText = false;
+    private boolean isRightOnlyImg = false;
     private int rightImgId;
     private int leftImgId;
     private String rightText;
     private String titleText;
     private int rightTextColor;
     private float rightTextSize;
+
+    private IToolBarClickListner iToolBarClickListner;
 
     public ToolBar(Context context) {
         super(context);
@@ -64,6 +68,39 @@ public class ToolBar extends RelativeLayout {
         if (!isShowRight) showNotRight();
         if (leftImgId!=0) setToolBarLeftImg(leftImgId);
         if (isRightOnlyText) showOnlyRightTv(rightText);
+        if (isRightOnlyImg) showOnlyRightImg(rightImgId);
+
+        initListener();
+    }
+
+    private void initListener() {
+        toolBarLeftImg.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (iToolBarClickListner!=null) {
+                    iToolBarClickListner.onLeftClick();
+                }
+            }
+        });
+
+        toolbarRightImg.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (iToolBarClickListner!=null) {
+                    iToolBarClickListner.onRightClick();
+                }
+            }
+        });
+
+        toolbarRightTv.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (iToolBarClickListner!=null) {
+                    iToolBarClickListner.onRightClick();
+                }
+            }
+        });
+
     }
 
     private void initToolBarAttrs(Context context, AttributeSet attrs) {
@@ -75,10 +112,11 @@ public class ToolBar extends RelativeLayout {
         rightImgId = typedArray.getResourceId(R.styleable.ToolBar_right_src,0);
         leftImgId = typedArray.getResourceId(R.styleable.ToolBar_left_src,0);
         rightTextColor = typedArray.getColor(R.styleable.ToolBar_right_text_color, Color.BLACK);
-        rightTextSize = typedArray.getInt(R.styleable.ToolBar_right_text_size, 20);
+        rightTextSize = typedArray.getInt(R.styleable.ToolBar_right_text_size, 0);
         titleText = typedArray.getString(R.styleable.ToolBar_title_text);
         isShowRight = typedArray.getBoolean(R.styleable.ToolBar_right_show, true);
         isRightOnlyText = typedArray.getBoolean(R.styleable.ToolBar_right_show_only_text, false);
+        isRightOnlyImg = typedArray.getBoolean(R.styleable.ToolBar_right_show_only_img, false);
     }
 
     //可以修改toolbar的显示的主题
@@ -141,10 +179,15 @@ public class ToolBar extends RelativeLayout {
         toolbarRightTv.setTextSize(size);
     }
 
+    public void setToolBarClickListner(IToolBarClickListner iToolBarClickListner) {
+        this.iToolBarClickListner = iToolBarClickListner;
+    }
 
-
-
-
+    //封装ToolBar的控件的点击事件
+    public interface IToolBarClickListner{
+        void onLeftClick();//ToolBar的左侧控件被点击时调用
+        void onRightClick();//ToolBar的右侧控件被点击
+    }
 
 
 }

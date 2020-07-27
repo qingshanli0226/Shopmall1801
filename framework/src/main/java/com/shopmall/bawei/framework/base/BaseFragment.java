@@ -12,16 +12,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-public abstract class BaseFragment extends Fragment {
+import com.shopmall.bawei.common.view.ToolBar;
+import com.shopmall.bawei.framework.R;
+
+public abstract class BaseFragment extends Fragment implements ToolBar.IToolBarClickListner {
     private View rootView;
     private String TAG;
+
+    protected ToolBar toolbar;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
          super.onCreateView(inflater, container, savedInstanceState);
          TAG = "LQS:" + getClass().getSimpleName();
+
          rootView = inflater.inflate(getLayoutId(), container, false);
+         toolbar = findViewById(R.id.toolbar);//在这里实例化toolbar
+         toolbar.setToolBarClickListner(this);
          return rootView;
     }
 
@@ -58,4 +66,12 @@ public abstract class BaseFragment extends Fragment {
         startActivity(intent);
     }
 
+    @Override
+    public void onLeftClick() {
+        getActivity().finish();//左侧点击事件，大部分都是销毁当前的Activity，所以定义一个默认实现
+    }
+
+    @Override
+    public void onRightClick() {//右侧不能确定点击之后，子类的行为，所以在基类中没必要定义一个默认实现，具体实现让子类完成.
+    }
 }

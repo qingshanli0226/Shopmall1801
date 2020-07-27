@@ -7,14 +7,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+
+import com.shopmall.bawei.common.view.ToolBar;
+import com.shopmall.bawei.framework.R;
 /*
 import com.lqs.kuaishou.kuaishou1801.AdrActivity;
 import com.lqs.kuaishou.kuaishou1801.cache.CacheManager;*/
 
 //定义Activity的基类，在里面定义抽象方法，抽象方法按照一定时序调用。并且在基类中定义方法，让子类复用
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity implements ToolBar.IToolBarClickListner {
 
     private String TAG;
+    protected ToolBar toolbar;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,6 +28,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         setContentView(getLayoutId());
 
         initView();
+        toolbar = findViewById(R.id.toolbar);//在这里实例化toolbar
+        toolbar.setToolBarClickListner(this);
         TAG = "LQS:" + getClass().getSimpleName();
         create();
     }
@@ -108,4 +114,13 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onLeftClick() {
+        finish();
+    }
+
+    @Override
+    public void onRightClick() {
+
+    }
 }
