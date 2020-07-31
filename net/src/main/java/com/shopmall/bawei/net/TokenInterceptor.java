@@ -1,5 +1,9 @@
 package com.shopmall.bawei.net;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import com.shopmall.bawei.common.ShopmallConstant;
 
 import java.io.IOException;
 
@@ -12,9 +16,11 @@ public class TokenInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
 
-        Request request = chain.request();
+        Context context = NetModule.context;
+        SharedPreferences sharedPreferences = context.getSharedPreferences(ShopmallConstant.spName,Context.MODE_PRIVATE);
 
-        Request newRequest = request.newBuilder().addHeader("token", "").build();
+        Request request = chain.request();
+        Request newRequest = request.newBuilder().addHeader("token", sharedPreferences.getString(ShopmallConstant.tokenName,"")).build();
 
         return chain.proceed(newRequest);
     }

@@ -1,18 +1,16 @@
 package com.shopmall.bawei.user.login.presenter;
 
 
+import com.shopmall.bawei.net.mode.LoginBean;
 import com.shopmall.bawei.net.NetFunction;
 import com.shopmall.bawei.net.RetroCreator;
 import com.shopmall.bawei.net.ShopmallObserver;
 import com.shopmall.bawei.net.mode.BaseBean;
-import com.shopmall.bawei.net.mode.LoginBean;
 import com.shopmall.bawei.user.login.contract.LoginContract;
 
 import java.util.HashMap;
 
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class LoginPresenterImpl extends LoginContract.LoginPresenter {

@@ -2,13 +2,17 @@ package com.shopmall.bawei.net;
 
 
 
+import com.shopmall.bawei.net.mode.LoginBean;
+import com.shopmall.bawei.net.mode.ShopcarBean;
 import com.shopmall.bawei.net.mode.BaseBean;
 import com.shopmall.bawei.net.mode.HomeBean;
-import com.shopmall.bawei.net.mode.LoginBean;
 
 import java.util.HashMap;
+import java.util.List;
 
 import io.reactivex.Observable;
+import okhttp3.RequestBody;
+import retrofit2.http.Body;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -27,4 +31,23 @@ public interface ShopmallApiService {
     @POST("login")
     @FormUrlEncoded
     Observable<BaseBean<LoginBean>> login(@FieldMap HashMap<String, String> params);
+
+    @POST("checkOneProductInventory")
+    @FormUrlEncoded
+    Observable<BaseBean<String>> checkOneProductInventory(@FieldMap HashMap<String,String> params);
+
+    @POST("addOneProduct")
+    Observable<BaseBean<String>> addOneProduct(@Body RequestBody requestBody);
+
+    @GET("getShortcartProducts")
+    Observable<BaseBean<List<ShopcarBean>>> getShortcartProducts();
+
+    @POST("updateProductNum")
+    Observable<BaseBean<String>> updateProductNum(@Body RequestBody requestBody);
+
+    @POST("updateProductSelected")
+    Observable<BaseBean<String>> updateProductSelected(@Body RequestBody requestBody);
+
+    @POST("selectAllProduct")
+    Observable<BaseBean<String>> selectAllProduct(@Body RequestBody requestBody);
 }

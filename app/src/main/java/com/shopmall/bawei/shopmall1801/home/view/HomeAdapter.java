@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.ImageView;
@@ -13,6 +14,7 @@ import com.shopmall.bawei.common.ShopmallConstant;
 import com.shopmall.bawei.framework.base.BaseRVAdapter;
 import com.shopmall.bawei.net.mode.HomeBean;
 import com.shopmall.bawei.shopmall1801.R;
+import com.shopmall.bawei.shopmall1801.product.view.ProductDetailActivity;
 import com.shopmall.bawei.user.login.view.LoginRegisterActivity;
 import com.youth.banner.Banner;
 import com.youth.banner.loader.ImageLoader;
@@ -80,9 +82,23 @@ public class HomeAdapter extends BaseRVAdapter<Object> {
         });
     }
 
-    private void displayAct(Object itemData, BaseViewHolder baseViewHolder) {
+    private void displayAct(Object itemData, final BaseViewHolder baseViewHolder) {
         Log.d("LQS", "displayAct...");
-        HomeBean.ActInfoBean actInfoBean = (HomeBean.ActInfoBean)itemData;//强转成我们需要的类型
+        List<HomeBean.ActInfoBean> actInfoBeans = (List<HomeBean.ActInfoBean>)itemData;//强转成我们需要的类型
+        RecyclerView actRv = baseViewHolder.getView(R.id.actRv);
+        actRv.setLayoutManager(new LinearLayoutManager(baseViewHolder.itemView.getContext(),LinearLayoutManager.HORIZONTAL, false));
+
+        ActAdapter actAdapter = new ActAdapter();
+        actRv.setAdapter(actAdapter);
+        actAdapter.updataData(actInfoBeans);
+        actAdapter.setiRecyclerViewItemClickListener(new IRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Intent intent = new Intent();
+                intent.setClass((Activity)(baseViewHolder.itemView.getContext()), LoginRegisterActivity.class);
+                ((Activity)(baseViewHolder.itemView.getContext())).startActivity(intent);
+            }
+        });
     }
 
     private void displayBanner(Object itemData, BaseViewHolder baseViewHolder) {
@@ -104,9 +120,27 @@ public class HomeAdapter extends BaseRVAdapter<Object> {
         banner.start();
     }
 
-    private void displayHot(Object itemData, BaseViewHolder baseViewHolder) {
+    private void displayHot(Object itemData, final BaseViewHolder baseViewHolder) {
         Log.d("LQS", "displayHot...");
-        HomeBean.HotInfoBean hotInfoBean = (HomeBean.HotInfoBean)itemData;//强转成我们需要的类型
+        List<HomeBean.HotInfoBean> hotInfoBeans = (List<HomeBean.HotInfoBean>)itemData;//强转成我们需要的类型
+        RecyclerView hotRv = baseViewHolder.getView(R.id.hotRv);
+        hotRv.setLayoutManager(new GridLayoutManager(baseViewHolder.itemView.getContext(),2));
+
+        final HotAdapter hotAdapter = new HotAdapter();
+        hotRv.setAdapter(hotAdapter);
+        hotAdapter.updataData(hotInfoBeans);
+        hotAdapter.setiRecyclerViewItemClickListener(new IRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Intent intent = new Intent();
+                intent.putExtra("productId", hotAdapter.getItemData(position).getProduct_id());
+                intent.putExtra("productName", hotAdapter.getItemData(position).getName());
+                intent.putExtra("productPrice", hotAdapter.getItemData(position).getCover_price());
+                intent.putExtra("url", hotAdapter.getItemData(position).getFigure());
+                intent.setClass((Activity)(baseViewHolder.itemView.getContext()), ProductDetailActivity.class);
+                ((Activity)(baseViewHolder.itemView.getContext())).startActivity(intent);
+            }
+        });
     }
 
     private void displayRecommend(Object itemData, BaseViewHolder baseViewHolder) {

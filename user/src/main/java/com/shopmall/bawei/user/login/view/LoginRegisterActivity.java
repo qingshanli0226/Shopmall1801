@@ -2,10 +2,14 @@ package com.shopmall.bawei.user.login.view;
 
 import android.support.v4.view.ViewPager;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.shopmall.bawei.framework.base.BaseActivity;
 import com.shopmall.bawei.user.R;
 
 
+
+@Route(path = "/usr/LoginRegisterActivity")
 public class LoginRegisterActivity extends BaseActivity {
     private ViewPager viewPager;
     private LoginRegisterAdapter loginRegisterAdapter;
@@ -17,6 +21,8 @@ public class LoginRegisterActivity extends BaseActivity {
         viewPager = findViewById(R.id.viewPager);
         loginRegisterAdapter = new LoginRegisterAdapter(getSupportFragmentManager());
         viewPager.setAdapter(loginRegisterAdapter);
+
+        ARouter.getInstance().inject(this);
     }
 
     @Override

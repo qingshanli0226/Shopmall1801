@@ -2,6 +2,6 @@
     package="com.shopmall.bawei.shopcar">
 
     <application>
-        <activity android:name=".ShopcarActivity"/>
+        <activity android:name=".shopcar.view.ShopcarActivity"/>
     </application>
 </manifest>

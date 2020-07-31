@@ -1,9 +1,9 @@
 package com.shopmall.bawei.user.login.contract;
 
 
+import com.shopmall.bawei.net.mode.LoginBean;
 import com.shopmall.bawei.framework.base.BasePresenter;
 import com.shopmall.bawei.framework.base.IView;
-import com.shopmall.bawei.net.mode.LoginBean;
 
 public class LoginContract {
 

@@ -3,9 +3,12 @@ package com.shopmall.bawei.user.login.view;
 import android.view.View;
 import android.widget.EditText;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.shopmall.bawei.common.ShopmallConstant;
-import com.shopmall.bawei.framework.base.BaseMVPFragment;
 import com.shopmall.bawei.net.mode.LoginBean;
+import com.shopmall.bawei.framework.manager.ShopUserManager;
+import com.shopmall.bawei.common.view.BottomBar;
+import com.shopmall.bawei.framework.base.BaseMVPFragment;
 import com.shopmall.bawei.user.R;
 import com.shopmall.bawei.user.login.contract.LoginContract;
 import com.shopmall.bawei.user.login.presenter.LoginPresenterImpl;
@@ -92,6 +95,16 @@ public class LoginFragment extends BaseMVPFragment<LoginPresenterImpl, LoginCont
     public void onLogin(LoginBean loginBean) {
         showMessage("登录成功");
         //实现跳转到MainActivity，显示HomeFragment,Activity的启动模式问题.
+        ShopUserManager.getInstance().saveLoginBean(loginBean);//把登录后的用户信息存储起来
+        /*Intent intent = new Intent();
+        intent.setAction("com.bawei.1801.HOME");//通过隐式方式启动主页面
+        intent.putExtra("index", BottomBar.HOME_INDEX);
+        startActivity(intent);*/
+
+
+        showMessage("使用ARouter");
+        ARouter.getInstance().build("/main/MainActivity").withInt("index", BottomBar.HOME_INDEX).navigation();
+
         getActivity().finish();//是不是一定能回到MainActivity，这个不一定，因为，MainActivity有可能被系统回收.
     }
 }

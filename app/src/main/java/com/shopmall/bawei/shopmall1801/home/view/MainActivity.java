@@ -1,32 +1,29 @@
 package com.shopmall.bawei.shopmall1801.home.view;
 
 import android.Manifest;
-import android.app.job.JobInfo;
-import android.app.job.JobScheduler;
-import android.app.job.JobWorkItem;
 import android.content.Intent;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
+import com.shopmall.bawei.framework.manager.CacheManager;
+import com.shopmall.bawei.framework.manager.ShopUserManager;
 import com.shopmall.bawei.common.view.BottomBar;
-import com.shopmall.bawei.common.view.ToolBar;
 import com.shopmall.bawei.framework.base.BaseActivity;
-import com.shopmall.bawei.shopcar.ShopcarActivity;
+import com.shopmall.bawei.net.mode.ShopcarBean;
+import com.shopmall.bawei.shopcar.shopcar.view.ShopcarFragment;
 import com.shopmall.bawei.shopmall1801.R;
 
 import java.util.List;
 
+
+@Route(path = "/main/MainActivity")
 public class MainActivity extends BaseActivity implements View.OnClickListener, BottomBar.IBottomBarSelectListener {
 
     private BottomBar bottomBar;
@@ -38,13 +35,66 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     protected void initView() {
         bottomBar = findViewById(R.id.bottomBar);
         bottomBar.setBottomBarSelectListener(this);
-        bottomBar.setTabTitle(new String[] {"1801", "1802", "1803", "1804"});
 
         switchFragment(BottomBar.HOME_INDEX);//MainAcitivity默认进入HomeFragment
 
         initPermission();
+        showMessage("onCreate");
+        //ARouter注入
+        ARouter.getInstance().inject(this);
+
+        //页面显示时，刷新购物车数据
+        updateShopcarCount();
+        //注册listener监听购物车公共数据是否发生改变,改变后，要去刷新购物车数量
+        initShopcarDataChangeListener();
+
     }
 
+    private CacheManager.IShopcarDataChangeListener iShopcarDataChangeListener = new CacheManager.IShopcarDataChangeListener() {
+        @Override
+        public void onDataChanged(List<ShopcarBean> shopcarBeanList) {
+            int count = shopcarBeanList.size();
+            bottomBar.setShopcarCount(String.valueOf(count));//数据发生改变后，去刷新UI
+        }
+
+        @Override
+        public void onOneDataChanged(int position, ShopcarBean shopcarBean) {
+
+        }
+
+        @Override
+        public void onMoneyChanged(String moneyValue) {
+
+        }
+
+        @Override
+        public void onAllSelected(boolean isAllSelect) {
+
+        }
+    };
+
+    private void initShopcarDataChangeListener() {
+        CacheManager.getInstance().setShopcarDataChangeListener(iShopcarDataChangeListener);
+    }
+
+    private void updateShopcarCount() {
+        //如果用户登录了，才可以刷新购物车数据，否则购物车数据并没有初始化，没必要刷新
+        if (ShopUserManager.getInstance().isUserLogin()) {
+            int count = CacheManager.getInstance().getShopcarBeanList().size();
+            bottomBar.setShopcarCount(String.valueOf(count));
+        }
+    }
+
+    //该方法被调用时机：1，该Activity的启动模式不是标准模式。2，在调用startActivity启动该Activity时，该Activity实例已经存在，并且复用存在的Activity实例时，该方法将被调用
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        showMessage("onNewIntent");
+        setIntent(intent);//这个方法是将intent设置成默认创建的intent
+        int index = getIntent().getIntExtra("index", -1);
+        switchFragment(index);//切换到参数指定的Fragment页面
+        bottomBar.selectHome();//让bottomBar和Fragment对应显示
+    }
 
     private void initPermission() {
         //该Api（方法）在23版本之前系统是没有的。例如15版本的系统就没有该API
@@ -71,6 +121,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void onBottomBarSelected(int selectIndex) {
+        if (selectIndex == BottomBar.SHOPCAR_INDEX && !ShopUserManager.getInstance().isUserLogin()) {//如果当前用户没有登录，则跳转到登录界面
+            showMessage("请先登录");
+            ARouter.getInstance().build("/usr/LoginRegisterActivity").navigation();//跳转到loginActivity
+            return;
+        }
         switchFragment(selectIndex);//MainActivity监听BottomBar的点击事件，根据点击Button的位置去切换到对应的Fragment
     }
 
@@ -93,5 +148,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             fragmentTransaction.add( R.id.frameLayoutId, fragment,fragment.getClass().getSimpleName()).commit();
         }
         currentFragment = fragment;
+    }
+
+    public static void switchFragment() {
+
+    }
+
+    @Override
+    protected void destroy() {
+        super.destroy();
+        CacheManager.getInstance().unSetShopcarDataChangerListener(iShopcarDataChangeListener);
     }
 }

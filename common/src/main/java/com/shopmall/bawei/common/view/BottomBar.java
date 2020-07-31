@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
@@ -20,6 +21,7 @@ public class BottomBar extends FrameLayout {
     public static final int TYPE_INDEX = 1;
     public static final int SHOPCAR_INDEX = 2;
     public static final int MINE_INDEX = 3;
+    private RadioGroup radioGroup;
 
     private int selectColor;
 
@@ -51,6 +53,14 @@ public class BottomBar extends FrameLayout {
         mineButton.setText(tabTitles[3]);
     }
 
+    public void setShopcarCount(String count) {
+        if (TextUtils.isEmpty(count) && !count.equals("0")) {
+            return;
+        }
+        RadioButton shopcarButton = findViewById(R.id.shopcar);
+        shopcarButton.setText("购物车：" + count);
+    }
+
     //初始化函数
     private void init(Context context, AttributeSet attrs, int defStyleAttr) {
 
@@ -58,7 +68,7 @@ public class BottomBar extends FrameLayout {
         LayoutInflater inflater = LayoutInflater.from(context);
         inflater.inflate(R.layout.bottombar_layout, this);
 
-        RadioGroup radioGroup = findViewById(R.id.bottomGroup);
+        radioGroup = findViewById(R.id.bottomGroup);
         //设置点击事件
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -77,41 +87,45 @@ public class BottomBar extends FrameLayout {
         selectHome();//默认显示home
     }
 
-    private void selectHome() {
+    public void selectHome() {
         findViewById(R.id.home).setBackgroundColor(selectColor);
         findViewById(R.id.type).setBackgroundColor(Color.WHITE);
         findViewById(R.id.shopcar).setBackgroundColor(Color.WHITE);
         findViewById(R.id.mine).setBackgroundColor(Color.WHITE);
+        radioGroup.check(R.id.home);
         if (iBottomBarSelectListener!=null) {
             iBottomBarSelectListener.onBottomBarSelected(HOME_INDEX);
         }
     }
 
-    private void selectType() {
+    public void selectType() {
         findViewById(R.id.home).setBackgroundColor(Color.WHITE);
         findViewById(R.id.type).setBackgroundColor(selectColor);
         findViewById(R.id.shopcar).setBackgroundColor(Color.WHITE);
         findViewById(R.id.mine).setBackgroundColor(Color.WHITE);
+        radioGroup.check(R.id.type);
         if (iBottomBarSelectListener!=null) {
             iBottomBarSelectListener.onBottomBarSelected(TYPE_INDEX);
         }
     }
 
-    private void selectShopcar() {
+    public void selectShopcar() {
         findViewById(R.id.home).setBackgroundColor(Color.WHITE);
         findViewById(R.id.type).setBackgroundColor(Color.WHITE);
         findViewById(R.id.shopcar).setBackgroundColor(selectColor);
         findViewById(R.id.mine).setBackgroundColor(Color.WHITE);
+        radioGroup.check(R.id.shopcar);
         if (iBottomBarSelectListener!=null) {
             iBottomBarSelectListener.onBottomBarSelected(SHOPCAR_INDEX);
         }
     }
 
-    private void selectMine() {
+    public void selectMine() {
         findViewById(R.id.home).setBackgroundColor(Color.WHITE);
         findViewById(R.id.type).setBackgroundColor(Color.WHITE);
         findViewById(R.id.shopcar).setBackgroundColor(Color.WHITE);
         findViewById(R.id.mine).setBackgroundColor(selectColor);
+        radioGroup.check(R.id.mine);
         if (iBottomBarSelectListener!=null) {
             iBottomBarSelectListener.onBottomBarSelected(MINE_INDEX);
         }

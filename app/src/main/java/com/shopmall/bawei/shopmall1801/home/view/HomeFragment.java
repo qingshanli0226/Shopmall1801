@@ -8,10 +8,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.shopmall.bawei.common.view.ToolBar;
 import com.shopmall.bawei.framework.base.BaseMVPFragment;
 import com.shopmall.bawei.net.mode.HomeBean;
-import com.shopmall.bawei.shopcar.ShopcarActivity;
 import com.shopmall.bawei.shopmall1801.R;
 import com.shopmall.bawei.shopmall1801.home.contract.HomeContract;
 import com.shopmall.bawei.shopmall1801.home.presenter.HomePresenterImpl;
@@ -51,13 +49,6 @@ public class HomeFragment extends BaseMVPFragment<HomePresenterImpl, HomeContrac
         errorTv = findViewById(R.id.errorTv);
         errorTv.setOnClickListener(this);
         normalContent = findViewById(R.id.normalContent);
-       /* toolBar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(),ShopcarActivity.class);
-                startActivity(intent);
-            }
-        });*/
     }
 
     @Override

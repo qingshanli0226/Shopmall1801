@@ -23,7 +23,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".home.view.MainActivity"/>
+        <activity android:name=".home.view.MainActivity"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="com.bawei.1801.HOME"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
 
         <activity android:name=".home.view.MessageActivity"/>
 
@@ -33,6 +39,9 @@
         <meta-data
             android:name="design_height_in_dp"
             android:value="1066"/>
+
+        <activity android:name=".product.view.ProductDetailActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

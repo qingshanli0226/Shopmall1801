@@ -28,5 +28,11 @@ public class ShopmallConstant {
     public static final String PLAYER_VIDEO_POSITION = "position";
 
 
+    public static final String spName = "shopmall";
+    public static final String tokenName = "token";
+
+    public static final String LOGIN_ACTION = "com.bawei.shopmall.LOGIN_ACTION";
+
+
 
 }

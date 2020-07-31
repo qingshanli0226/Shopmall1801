@@ -22,7 +22,7 @@ public class HomePresenterImpl extends HomeContract.HomePresenter {
     @Override
     public void getHomeData() {
         RetroCreator.getShopmallApiServie().getHomeData()
-                .delay(3, TimeUnit.SECONDS)//模拟网络请求差的情况，3秒钟后才实际进行网络请求
+                .delay(1, TimeUnit.SECONDS)//模拟网络请求差的情况，3秒钟后才实际进行网络请求
                 .subscribeOn(Schedulers.io())
                 .map(new NetFunction<BaseBean<HomeBean>, HomeBean>())
                 .observeOn(AndroidSchedulers.mainThread())
